@@ -1,0 +1,122 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs'
+    id 'dagger.hilt.android.plugin'
+}
+apply plugin: 'dagger.hilt.android.plugin'
+android {
+    namespace 'p.l.e.x.u.s.interactive_fiction'
+    compileSdk 32
+    compileSdkVersion 32
+    buildToolsVersion '32.0.0'
+    defaultConfig {
+        applicationId "p.l.e.x.u.s.interactive_fiction"
+        minSdk 21
+        minSdkVersion 21
+        targetSdk 32
+        targetSdkVersion 32
+        versionCode 1
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            zipAlignEnabled true
+            shrinkResources false
+            jniDebuggable = true
+            renderscriptDebuggable = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            renderscriptOptimLevel 3
+            multiDexEnabled true
+        }
+        release {
+            minifyEnabled true
+            debuggable false
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
+            renderscriptOptimLevel 3
+            renderscriptDebuggable false
+            jniDebuggable false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+        useIR = true
+    }
+    dependenciesInfo {
+        includeInApk true
+        includeInBundle true
+    }
+    lint {
+        checkReleaseBuilds true
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    applicationVariants.all { final variant ->
+        variant.outputs.all {
+            archivesBaseName = "$applicationId-${defaultConfig.versionName}-" +
+                    "${defaultConfig.versionCode}-${variant.buildType.name}-" +
+                    "${new Date().format("yyyy-MM-dd")}"
+            // APK build output filename
+            outputFileName = "${archivesBaseName}.apk"
+            // Create constants accessible from Java via BuildConfig.<FIELD_NAME>
+            buildConfigField "String", "VERSION_NAME", "\"$versionName\""
+            buildConfigField "String", "VERSION_CODE", "\"$versionCode\""
+            buildConfigField "String", "BUILD_DATE", "\"${new Date().format("yyyy-MM-dd")}\""
+        }
+    }
+}
+configurations {
+    cleanedAnnotations
+}
+dependencies {
+    // Libraries
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // AndroidX
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_version"
+    // Jetpack Compose
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha08'
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$androidx_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$androidx_version"
+    // DI
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
+    // Tests
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    // Debug
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+}

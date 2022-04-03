@@ -1,0 +1,17 @@
+pluginManagement { PluginManagementSpec pluginManagementSpec ->
+    repositories { RepositoryHandler repositoryHandler ->
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url "https://www.jitpack.io" }
+    }
+}
+dependencyResolutionManagement { dependencyResolutionManagement ->
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories { RepositoryHandler repositoryHandler ->
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "InteractiveFictionApplication"
+include ':app'
